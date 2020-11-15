@@ -32,17 +32,21 @@
         sdk-version (str version suffix)]
     (println (sdkman/internal->wire {:url url} sdk-version platform))))
 
-(main "corretto-8" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-(main "corretto-8" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-(main "corretto-8" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-(main "corretto-8" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+(defn -main
+  [& args]
+  (main "corretto-8" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
+  (main "corretto-8" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
+  (main "corretto-8" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
+  (main "corretto-8" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
 
-(main "corretto-11" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-(main "corretto-11" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-(main "corretto-11" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-(main "corretto-11" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+  (main "corretto-11" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
+  (main "corretto-11" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
+  (main "corretto-11" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
+  (main "corretto-11" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
 
-(main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-(main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-(main "corretto-jdk" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-(main "corretto-jdk" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
+  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
+  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
+  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+
+  (println "Amazon Corretto Done"))

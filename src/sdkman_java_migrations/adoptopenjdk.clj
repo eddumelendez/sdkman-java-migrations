@@ -48,38 +48,42 @@
         last-jdk (fetch-jdk version arch impl os)]
     (println (sdkman/internal->wire last-jdk (parse-version last-jdk impl) platform))))
 
-(main "[8,9)" "hotspot" "linux" "x64")
-(main "[8,9)" "openj9" "linux" "x64")
+(defn -main
+  [& args]
+  (main "[8,9)" "hotspot" "linux" "x64")
+  (main "[8,9)" "openj9" "linux" "x64")
 
-(main "[8,9)" "hotspot" "linux" "aarch64")
-(main "[8,9)" "openj9" "linux" "aarch64")
+  (main "[8,9)" "hotspot" "linux" "aarch64")
+  (main "[8,9)" "openj9" "linux" "aarch64")
 
-(main "[8,9)" "hotspot" "windows" "x64")
-(main "[8,9)" "openj9" "windows" "x64")
+  (main "[8,9)" "hotspot" "windows" "x64")
+  (main "[8,9)" "openj9" "windows" "x64")
 
-(main "[8,9)" "hotspot" "mac" "x64")
-(main "[8,9)" "openj9" "mac" "x64")
+  (main "[8,9)" "hotspot" "mac" "x64")
+  (main "[8,9)" "openj9" "mac" "x64")
 
-(main "[11,12)" "hotspot" "linux" "x64")
-(main "[11,12)" "openj9" "linux" "x64")
+  (main "[11,12)" "hotspot" "linux" "x64")
+  (main "[11,12)" "openj9" "linux" "x64")
 
-(main "[11,12)" "hotspot" "linux" "aarch64")
-(main "[11,12)" "openj9" "linux" "aarch64")
+  (main "[11,12)" "hotspot" "linux" "aarch64")
+  (main "[11,12)" "openj9" "linux" "aarch64")
 
-(main "[11,12)" "hotspot" "windows" "x64")
-(main "[11,12)" "openj9" "windows" "x64")
+  (main "[11,12)" "hotspot" "windows" "x64")
+  (main "[11,12)" "openj9" "windows" "x64")
 
-(main "[11,12)" "hotspot" "mac" "x64")
-(main "[11,12)" "openj9" "mac" "x64")
+  (main "[11,12)" "hotspot" "mac" "x64")
+  (main "[11,12)" "openj9" "mac" "x64")
 
-(main "[15,16)" "hotspot" "linux" "x64")
-(main "[15,16)" "openj9" "linux" "x64")
+  (main "[15,16)" "hotspot" "linux" "x64")
+  (main "[15,16)" "openj9" "linux" "x64")
 
-(main "[15,16)" "hotspot" "linux" "aarch64")
-(main "[15,16)" "openj9" "linux" "aarch64")
+  (main "[15,16)" "hotspot" "linux" "aarch64")
+  (main "[15,16)" "openj9" "linux" "aarch64")
 
-(main "[15,16)" "hotspot" "windows" "x64")
-(main "[15,16)" "openj9" "windows" "x64")
+  (main "[15,16)" "hotspot" "windows" "x64")
+  (main "[15,16)" "openj9" "windows" "x64")
 
-(main "[15,16)" "hotspot" "mac" "x64")
-(main "[15,16)" "openj9" "mac" "x64")
+  (main "[15,16)" "hotspot" "mac" "x64")
+  (main "[15,16)" "openj9" "mac" "x64")
+
+  (println "AdoptOpenJDK Done"))
