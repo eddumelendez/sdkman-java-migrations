@@ -10,15 +10,18 @@
   {:hotspot "hs"
    :openj9  "j9"})
 
-(def ^:private base-url
-  (str "https://api.adoptopenjdk.net/v3/assets/version/%s"
-       "?architecture=%s"
-       "&heap_size=normal"
-       "&image_type=jdk"
-       "&jvm_impl=%s"
-       "&os=%s"
-       "&release_type=ga"
-       "&vendor=adoptopenjdk"))
+(defn ^:private base-url
+  [impl]
+  (let [url (str "https://api.adoptopenjdk.net/v3/assets/version/%s"
+                 "?architecture=%s"
+                 "&heap_size=normal"
+                 "&image_type=jdk"
+                 "&os=%s"
+                 "&release_type=ga"
+                 "&vendor=%s")]
+    (if impl
+      (str url "&jvm_impl=%s")
+      url)))
 
 (defn wire->internal
   [{:keys [binaries version_data]}]
@@ -26,8 +29,11 @@
    :url     (-> binaries first :package :link)})
 
 (defn fetch-jdk
-  [version arch impl os]
-  (let [url (format base-url (URLEncoder/encode version "UTF-8") arch impl os)
+  [version arch impl os vendor]
+  (let [base-url' (base-url impl)
+        url (if impl
+              (format base-url' (URLEncoder/encode version "UTF-8") arch os vendor impl)
+              (format base-url' (URLEncoder/encode version "UTF-8") arch os vendor))
         {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json")]
     (if (zero? exit)
       (->> (json/read-str out :key-fn keyword)
@@ -38,52 +44,69 @@
 
 (defn parse-version
   [{:keys [version]}
+   vendor
    impl]
-  (let [implementation (keyword impl)]
-    (str version "." (implementation implementations) suffix)))
+  (cond
+    (= vendor "adoptopenjdk")
+    (let [implementation (keyword impl)]
+      (str version "." (implementation implementations) suffix))
+
+    (= vendor "openjdk")
+    (str version ".open" suffix)))
 
 (defn main
-  [version impl os arch]
+  ([version os arch vendor]
+   (main version os arch vendor nil))
+  ([version os arch vendor impl]
   (let [platform (sdkman/platform os arch)
-        last-jdk (fetch-jdk version arch impl os)]
-    (println (sdkman/internal->wire last-jdk (parse-version last-jdk impl) platform))))
+        last-jdk (fetch-jdk version arch impl os vendor)]
+    (println (sdkman/internal->wire last-jdk (parse-version last-jdk vendor impl) platform)))))
 
 (defn -main
   [& args]
-  (main "[8,9)" "hotspot" "linux" "x64")
-  (main "[8,9)" "openj9" "linux" "x64")
+  (main "[8,9)" "linux" "x64" "adoptopenjdk" "hotspot")
+  (main "[8,9)" "linux" "x64" "adoptopenjdk" "openj9")
 
-  (main "[8,9)" "hotspot" "linux" "aarch64")
-  (main "[8,9)" "openj9" "linux" "aarch64")
+  (main "[8,9)" "linux" "aarch64" "adoptopenjdk" "hotspot")
+  (main "[8,9)" "linux" "aarch64" "adoptopenjdk" "openj9")
 
-  (main "[8,9)" "hotspot" "windows" "x64")
-  (main "[8,9)" "openj9" "windows" "x64")
+  (main "[8,9)" "windows" "x64" "adoptopenjdk" "hotspot")
+  (main "[8,9)" "windows" "x64" "adoptopenjdk" "openj9")
 
-  (main "[8,9)" "hotspot" "mac" "x64")
-  (main "[8,9)" "openj9" "mac" "x64")
+  (main "[8,9)" "mac" "x64" "adoptopenjdk" "hotspot")
+  (main "[8,9)" "mac" "x64" "adoptopenjdk" "openj9")
 
-  (main "[11,12)" "hotspot" "linux" "x64")
-  (main "[11,12)" "openj9" "linux" "x64")
+  (main "[11,12)" "linux" "x64" "adoptopenjdk" "hotspot")
+  (main "[11,12)" "linux" "x64" "adoptopenjdk" "openj9")
 
-  (main "[11,12)" "hotspot" "linux" "aarch64")
-  (main "[11,12)" "openj9" "linux" "aarch64")
+  (main "[11,12)" "linux" "aarch64" "adoptopenjdk" "hotspot")
+  (main "[11,12)" "linux" "aarch64" "adoptopenjdk" "openj9")
 
-  (main "[11,12)" "hotspot" "windows" "x64")
-  (main "[11,12)" "openj9" "windows" "x64")
+  (main "[11,12)" "windows" "x64" "adoptopenjdk" "hotspot")
+  (main "[11,12)" "windows" "x64" "adoptopenjdk" "openj9")
 
-  (main "[11,12)" "hotspot" "mac" "x64")
-  (main "[11,12)" "openj9" "mac" "x64")
+  (main "[11,12)" "mac" "x64" "adoptopenjdk" "hotspot")
+  (main "[11,12)" "mac" "x64" "adoptopenjdk" "openj9")
 
-  (main "[15,16)" "hotspot" "linux" "x64")
-  (main "[15,16)" "openj9" "linux" "x64")
+  (main "[15,16)" "linux" "x64" "adoptopenjdk" "hotspot")
+  (main "[15,16)" "linux" "x64" "adoptopenjdk" "openj9")
 
-  (main "[15,16)" "hotspot" "linux" "aarch64")
-  (main "[15,16)" "openj9" "linux" "aarch64")
+  (main "[15,16)" "linux" "aarch64" "adoptopenjdk" "hotspot")
+  (main "[15,16)" "linux" "aarch64" "adoptopenjdk" "openj9")
 
-  (main "[15,16)" "hotspot" "windows" "x64")
-  (main "[15,16)" "openj9" "windows" "x64")
+  (main "[15,16)" "windows" "x64" "adoptopenjdk" "hotspot")
+  (main "[15,16)" "windows" "x64" "adoptopenjdk" "openj9")
 
-  (main "[15,16)" "hotspot" "mac" "x64")
-  (main "[15,16)" "openj9" "mac" "x64")
+  (main "[15,16)"  "mac" "x64" "adoptopenjdk" "hotspot")
+  (main "[15,16)" "mac" "x64" "adoptopenjdk" "openj9")
+
+  (main "[8,9)" "linux" "x64" "adoptopenjdk" "hotspot")
+  (main "[8,9)" "linux" "x64" "adoptopenjdk" "openj9")
+
+  (main "[8,9)" "linux" "x64" "openjdk")
+  (main "[8,9)" "windows" "x64" "openjdk")
+
+  (main "[11,12)" "linux" "x64" "openjdk")
+  (main "[11,12)" "windows" "x64" "openjdk")
 
   (println "AdoptOpenJDK Done"))
