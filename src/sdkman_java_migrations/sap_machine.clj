@@ -36,7 +36,8 @@
 
 (defn main
   [version os arch]
-  (let [platform (sdkman/platform os arch)]
+  (let [os'      (if (= os "osx") "mac" os)
+        platform (sdkman/platform os' arch)]
     (println (->> (fetch-jdk version os arch)
                   (map #(sdkman/internal->wire % (parse-version %) platform))))))
 
