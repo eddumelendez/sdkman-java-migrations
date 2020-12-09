@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.adoptopenjdk
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman])
   (:import [java.net URLEncoder]))
@@ -34,13 +34,11 @@
         url (if impl
               (format base-url' (URLEncoder/encode version "UTF-8") arch os vendor impl)
               (format base-url' (URLEncoder/encode version "UTF-8") arch os vendor))
-        {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json")]
-    (if (zero? exit)
-      (->> (json/read-str out :key-fn keyword)
+        {:keys [status body]} (client/get url)]
+    (when (= 200 status)
+      (->> (json/read-str body :key-fn keyword)
            first
-           (wire->internal))
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+           (wire->internal)))))
 
 (defn parse-version
   [{:keys [version]}

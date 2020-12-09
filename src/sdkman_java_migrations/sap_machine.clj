@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.sap-machine
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
@@ -20,15 +20,13 @@
   [version os arch]
   (let [url (format base-url)
         version' (keyword version)
-        {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json")]
-    (if (zero? exit)
-      (->> (json/read-str out :key-fn keyword)
+        {:keys [status body]} (client/get url)]
+    (when (= 200 status)
+      (->> (json/read-str body :key-fn keyword)
            :assets
            version'
            :releases
-           (map #(wire->internal % os arch)))
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+           (map #(wire->internal % os arch))))))
 
 (defn parse-version
   [{:keys [version]}]

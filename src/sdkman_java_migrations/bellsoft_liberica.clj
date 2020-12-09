@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.bellsoft-liberica
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
@@ -34,13 +34,11 @@
 (defn fetch-jdk
   [arch os version-feature fx]
   (let [url (format base-url arch (bundle-type fx) os ((keyword os) package-type) version-feature)
-        {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json")]
-    (if (zero? exit)
-      (->> (json/read-str out :key-fn keyword)
+        {:keys [status body]} (client/get url)]
+    (when (= 200 status)
+      (->> (json/read-str body :key-fn keyword)
            first
-           (wire->internal))
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+           (wire->internal)))))
 
 (defn parse-version
   [{:keys [version]} fx]

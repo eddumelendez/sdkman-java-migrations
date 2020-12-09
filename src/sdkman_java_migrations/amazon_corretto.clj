@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.amazon-corretto
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
@@ -15,14 +15,12 @@
 (defn fetch-jdk
   [repository glob]
   (let [url (format base-url repository)
-        {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json" "-H" (str "Authorization: token " (System/getenv "GITHUB_TOKEN")))]
-    (if (zero? exit)
-      (->> (json/read-str out :key-fn keyword)
+        {:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})]
+    (when (= 200 status)
+      (->> (json/read-str body :key-fn keyword)
            (filter #(match-body? glob %))
            first
-           :tag_name)
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+           :tag_name))))
 
 (defn main
   [repository glob os arch artifact-suffix]

@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.azul-zulu
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
@@ -29,12 +29,10 @@
 (defn fetch-jdk
   [version os arch fx]
   (let [url (format base-url version os arch ((keyword os) ext) fx)
-        {:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json")]
-    (if (zero? exit)
-      (->> (json/read-str out :key-fn keyword)
-           (wire->internal))
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+        {:keys [status body]} (client/get url)]
+    (when (= 200 status)
+      (->> (json/read-str body :key-fn keyword)
+           (wire->internal)))))
 
 (defn parse-version
   [{:keys [version]}

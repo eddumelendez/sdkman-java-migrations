@@ -1,5 +1,5 @@
 (ns sdkman-java-migrations.graalvm
-  (:require [clojure.java.shell :as shell]
+  (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
@@ -24,9 +24,9 @@
 
 (defn fetch-jdk
   [glob]
-  (let [{:keys [:exit :err :out]} (shell/sh "curl" url "-H" "accept: application/json" "-H" (str "Authorization: token " (System/getenv "GITHUB_TOKEN")))]
-    (if (zero? exit)
-      (let [release  (->> (json/read-str out :key-fn keyword)
+  (let [{:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})]
+    (when (= 200 status)
+      (let [release  (->> (json/read-str body :key-fn keyword)
                           (filter #(match-asset-name? glob %))
                           first)
             tag-name (:tag_name release)
@@ -35,9 +35,7 @@
                           (filter #(match-name? glob %))
                           first
                           :browser_download_url)]
-        (wire->internal tag-name url))
-      (do (println "ERROR:" err)
-          (System/exit 1)))))
+        (wire->internal tag-name url)))))
 
 (defn parse-version
   [java-version
