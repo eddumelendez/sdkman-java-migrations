@@ -11,39 +11,39 @@
 (def ^:private base-url
   "https://sap.github.io/SapMachine/assets/data/sapmachine_releases.json")
 
-(defn wire->internal
+(defn ^:private wire->internal
   [{:keys [tag jdk]}
    os
    arch]
-  (let [os-arch (keyword (str os "-" arch))]
-    {:version (re-find (re-matcher #"\d.*" tag))
+  (let [os-arch (keyword (str os "-" arch))
+        version (re-find (re-matcher #"\d.*" tag))]
+    {:version version
      :url     (-> jdk os-arch)}))
 
-(defn fetch-jdk
+(defn ^:private fetch-jdk
   [version os arch]
   (let [url (format base-url)
         version' (keyword version)
         {:keys [status body]} (client/get url)]
     (when (= 200 status)
-      (->> (json/read-str body :key-fn keyword)
-           :assets
-           version'
-           :releases
-           (map #(wire->internal % os arch))
-           first))))
+      (-> (json/read-str body :key-fn keyword)
+          :assets
+          version'
+          :releases
+          first
+          (wire->internal os arch)))))
 
-(defn parse-version
+(defn ^:private parse-version
   [{:keys [version]}]
   (str version suffix))
 
-(defn main
+(defn ^:private main
   [version os arch]
-  (let [os'      (if (= os "osx") "mac" os)
+  (let [os' (if (= os "osx") "mac" os)
         platform (sdkman/platform os' arch)
-        jdk      (fetch-jdk version os arch)
+        jdk (fetch-jdk version os arch)
         version' (parse-version jdk)]
-    (println (-> jdk
-                 (adapters.release/internal->wire version' platform)))
+    (println (-> (adapters.release/internal->wire jdk version' platform)))
     ))
 
 (defn -main
