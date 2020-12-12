@@ -17,38 +17,34 @@
        "&version-feature=%s"
        "&version-modifier=latest"))
 
-(defn wire->internal
+(defn ^:private wire->internal
   [{:keys [downloadUrl featureVersion interimVersion updateVersion]}]
-  {:version (str featureVersion "." interimVersion "." updateVersion)
-   :url     downloadUrl})
+  (let [version (str featureVersion "." interimVersion "." updateVersion)]
+    {:version version
+     :url     downloadUrl}))
 
-(defn bundle-type
-  [fx]
-  (if fx
-    "jdk-full"
-    "jdk"))
-
-(def package-type
+(def ^:private package-type
   {:linux   "tar.gz"
    :macos   "zip"
    :windows "zip"})
 
-(defn fetch-jdk
+(defn ^:private fetch-jdk
   [arch os version-feature fx]
-  (let [url (format base-url arch (bundle-type fx) os ((keyword os) package-type) version-feature)
+  (let [bundle-type (if fx "jdk-full" "jdk")
+        url (format base-url arch bundle-type os ((keyword os) package-type) version-feature)
         {:keys [status body]} (client/get url)]
     (when (= 200 status)
       (->> (json/read-str body :key-fn keyword)
            first
            (wire->internal)))))
 
-(defn parse-version
+(defn ^:private parse-version
   [{:keys [version]} fx]
   (if fx
     (str version ".fx" suffix)
     (str version suffix)))
 
-(defn main
+(defn ^:private main
   ([version-feature os arch]
    (main version-feature os arch false))
   ([version-feature os arch fx]
