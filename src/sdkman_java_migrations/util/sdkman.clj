@@ -1,4 +1,13 @@
-(ns sdkman-java-migrations.util.sdkman)
+(ns sdkman-java-migrations.util.sdkman
+  (:require [clj-http.client :as client]
+            [clojure.data.json :as json]))
+
+(def ^:private vendor-release-url "https://vendors.sdkman.io/release")
+(def ^:private broadcast-url "https://vendors.sdkman.io/announce/struct")
+
+(def ^:private credentials
+  {"Consumer-Key"   (System/getenv "CONSUMER_KEY")
+   "Consumer-Token" (System/getenv "CONSUMER_TOKEN")})
 
 (def ^:private platforms
   {:linux   {:x64 "LINUX_64"
@@ -16,11 +25,16 @@
         arch' (keyword arch)]
     (-> platforms os' arch')))
 
-(defn internal->wire
-  [{:keys [url]}
-   version
-   platform]
-  {:candidate "java"
-   :version   version
-   :platform  platform
-   :url       url})
+(defn new-version
+  [request]
+  (client/post vendor-release-url {:headers      credentials
+                                   :accept       :json
+                                   :content-type :json
+                                   :body         (json/write-str request)}))
+
+(defn broadcast
+  [request]
+  (client/post broadcast-url {:headers      credentials
+                              :accept       :json
+                              :content-type :json
+                              :body         (json/write-str request)}))
