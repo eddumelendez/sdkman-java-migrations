@@ -6,6 +6,10 @@ The source code in this repository is used by GitHub actions to find the latest 
 
 The `adoptopenjdk` namespace fetch [AdoptOpenJDK API](https://api.adoptopenjdk.net/swagger-ui/) for new versions for `hotspot` and `openj9`.
 
+* Alibaba Dragonwell
+
+The `alibaba-dragonwell` namespace fetch [Alibaba repositories](https://github.com/alibaba/) for new versions.
+
 * Amazon Corretto
 
 The `amazon-correto` namespace fetch [Amazon Corretto repositories](https://github.com/corretto/) for new versions.
