@@ -26,6 +26,10 @@ The `bellsoft-liberica` namespace fetch [Bellsoft Liberica API](https://api.bell
 
 The `graalvm` namespace fetch [GraalVM Repository](https://github.com/graalvm/graalvm-ce-builds) for new versions.
 
+* OpenJDK
+
+The `openjdk` namespace fetch [jdk.java.net](https://jdk.java.net/) for new versions.
+
 * SapMachine
 
 The `sap-machine` namespace fetch [SapMachine](https://sap.github.io/SapMachine/assets/data/sapmachine_releases.json) for new versions.
