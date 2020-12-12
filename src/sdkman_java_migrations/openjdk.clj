@@ -10,9 +10,9 @@
 (def ^:private vendor "open")
 (def ^:private suffix (str "-" vendor))
 
-(def base-url "https://jdk.java.net/")
+(def ^:private base-url "https://jdk.java.net/")
 
-(defn wire->internal
+(defn ^:private wire->internal
   [url]
   {:version (second (re-find (re-matcher #"[^\w](\d.[-|\.][^_]+)" url)))
    :url     url})
@@ -25,39 +25,36 @@
         end-index (+ (str/index-of body end-tag) (count end-tag))]
     (subs body begin-index end-index)))
 
-(defn attr-pattern
-  [attrname pattern]
-  (fn [loc]
-    (re-find pattern (zip-xml/attr loc attrname))))
-
-(defn fetch-jdk
+(defn ^:private fetch-jdk
   [version glob]
   (let [url (str base-url version)
-        {:keys [status body]} (client/get url)]
+        {:keys [status body]} (client/get url)
+        href-attr-match? (fn [loc] (re-find glob (zip-xml/attr loc :href)))]
     (when (= 200 status)
-      (let [table (zip/xml-zip (xml/parse-str (substring body)))
+      (let [table (-> body substring xml/parse-str zip/xml-zip)
             link (zip-xml/xml1-> table
                                  :tr
                                  :td
                                  :a
-                                 (attr-pattern :href glob))]
+                                 href-attr-match?)]
         (wire->internal link)))))
 
-(defn parse-version
+(defn ^:private parse-version
   [version
    jdk]
-  (let [replace-fn (fn [version pattern] (-> version (str/replace pattern ".ea.") (str/replace #"-\d{1,3}" "")))]
+  (let [jdk-version (:version jdk)
+        replace-fn (fn [version pattern] (-> version (str/replace pattern ".ea.") (str/replace #"-\d{1,3}" "")))]
     (cond
       (= version "loom")
-      (str (replace-fn (:version jdk) #"-loom\+") ".lm" suffix)
+      (str (replace-fn jdk-version #"-loom\+") ".lm" suffix)
 
       (= version "panama")
-      (str (replace-fn (:version jdk) #"-panama\+") ".pma" suffix)
+      (str (replace-fn jdk-version #"-panama\+") ".pma" suffix)
 
       :else
-      (str (str/replace (:version jdk) #"-|\+" ".") suffix))))
+      (str (str/replace jdk-version #"-|\+" ".") suffix))))
 
-(defn main
+(defn ^:private main
   [version glob os arch]
   (let [jdk (fetch-jdk version glob)
         platform (sdkman/platform os arch)
