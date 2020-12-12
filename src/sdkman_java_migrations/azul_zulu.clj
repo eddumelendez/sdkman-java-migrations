@@ -1,9 +1,11 @@
 (ns sdkman-java-migrations.azul-zulu
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
-(def ^:private suffix "-zulu")
+(def ^:private vendor "zulu")
+(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   (str "https://api.azul.com/zulu/download/community/v1.0/bundles/latest/"
@@ -48,7 +50,7 @@
    (let [os'      (if (= os "macos") "mac" os)
          platform (sdkman/platform os' arch)
          last-jdk (fetch-jdk version os arch fx)]
-     (println (sdkman/internal->wire last-jdk (parse-version last-jdk fx) platform)))))
+     (println (adapters.release/internal->wire last-jdk (parse-version last-jdk fx) platform)))))
 
 (defn -main
   [& args]

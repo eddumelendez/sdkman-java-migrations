@@ -1,9 +1,11 @@
 (ns sdkman-java-migrations.bellsoft-liberica
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
-(def ^:private suffix "-librca")
+(def ^:private vendor "librca")
+(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   (str "https://api.bell-sw.com/v1/liberica/releases"
@@ -53,7 +55,7 @@
    (let [os' (if (= os "macos") "mac" os)
          platform (sdkman/platform os' arch)
          last-jdk (fetch-jdk arch os version-feature fx)]
-     (println (sdkman/internal->wire last-jdk (parse-version last-jdk fx) platform)))))
+     (println (adapters.release/internal->wire last-jdk (parse-version last-jdk fx) platform)))))
 
 (defn -main
   [& args]

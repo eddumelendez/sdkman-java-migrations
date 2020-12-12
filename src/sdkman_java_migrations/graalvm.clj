@@ -1,9 +1,11 @@
 (ns sdkman-java-migrations.graalvm
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
-(def ^:private suffix "-grl")
+(def ^:private vendor "grl")
+(def ^:private suffix (str "-" vendor))
 (def ^:private url "https://api.github.com/repos/graalvm/graalvm-ce-builds/releases")
 
 (defn match-name?
@@ -49,7 +51,7 @@
   (let [jdk (fetch-jdk glob)
         platform (sdkman/platform os arch)
         sdk-version (parse-version version jdk)]
-    (println (sdkman/internal->wire jdk sdk-version platform))))
+    (println (adapters.release/internal->wire jdk sdk-version platform))))
 
 (defn -main
   [& args]

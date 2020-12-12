@@ -1,10 +1,12 @@
 (ns sdkman-java-migrations.adoptopenjdk
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman])
   (:import [java.net URLEncoder]))
 
-(def ^:private suffix "-adpt")
+(def ^:private vendor "adpt")
+(def ^:private suffix (str "-" vendor))
 
 (def ^:private implementations
   {:hotspot "hs"
@@ -58,7 +60,7 @@
   ([version os arch vendor impl]
   (let [platform (sdkman/platform os arch)
         last-jdk (fetch-jdk version arch impl os vendor)]
-    (println (sdkman/internal->wire last-jdk (parse-version last-jdk vendor impl) platform)))))
+    (println (adapters.release/internal->wire last-jdk (parse-version last-jdk vendor impl) platform)))))
 
 (defn -main
   [& args]

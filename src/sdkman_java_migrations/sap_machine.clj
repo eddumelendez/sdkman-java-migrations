@@ -1,9 +1,12 @@
 (ns sdkman-java-migrations.sap-machine
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.broadcast :as adapters.broadcast]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
-(def ^:private suffix "-sapmchn")
+(def ^:private vendor "sapmchn")
+(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   "https://sap.github.io/SapMachine/assets/data/sapmachine_releases.json")
@@ -26,7 +29,8 @@
            :assets
            version'
            :releases
-           (map #(wire->internal % os arch))))))
+           (map #(wire->internal % os arch))
+           first))))
 
 (defn parse-version
   [{:keys [version]}]
@@ -35,9 +39,12 @@
 (defn main
   [version os arch]
   (let [os'      (if (= os "osx") "mac" os)
-        platform (sdkman/platform os' arch)]
-    (println (->> (fetch-jdk version os arch)
-                  (map #(sdkman/internal->wire % (parse-version %) platform))))))
+        platform (sdkman/platform os' arch)
+        jdk      (fetch-jdk version os arch)
+        version' (parse-version jdk)]
+    (println (-> jdk
+                 (adapters.release/internal->wire version' platform)))
+    ))
 
 (defn -main
   [& args]

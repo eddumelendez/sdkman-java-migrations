@@ -1,9 +1,11 @@
 (ns sdkman-java-migrations.amazon-corretto
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
-(def ^:private suffix "-amzn")
+(def ^:private vendor "amzn")
+(def ^:private suffix (str "-" vendor))
 (def ^:private corretto-url "https://corretto.aws/downloads/resources/%s/amazon-corretto-%s-%s")
 (def ^:private base-url "https://api.github.com/repos/corretto/%s/releases")
 
@@ -28,7 +30,7 @@
         platform (sdkman/platform os arch)
         url (format corretto-url version version artifact-suffix)
         sdk-version (str version suffix)]
-    (println (sdkman/internal->wire {:url url} sdk-version platform))))
+    (println (adapters.release/internal->wire {:url url} sdk-version platform))))
 
 (defn -main
   [& args]
