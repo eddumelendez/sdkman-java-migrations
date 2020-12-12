@@ -6,47 +6,52 @@
 
 (def ^:private vendor "amzn")
 (def ^:private suffix (str "-" vendor))
-(def ^:private corretto-url "https://corretto.aws/downloads/resources/%s/amazon-corretto-%s-%s")
 (def ^:private base-url "https://api.github.com/repos/corretto/%s/releases")
 
-(defn match-body?
+(defn ^:private match-body?
   [pattern
    {:keys [body]}]
   (re-find pattern body))
 
-(defn fetch-jdk
+(defn ^:private wire->internal
+  [tag url]
+  {:version tag
+   :url     url})
+
+(defn ^:private fetch-jdk
   [repository glob]
   (let [url (format base-url repository)
         {:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})]
     (when (= 200 status)
-      (->> (json/read-str body :key-fn keyword)
-           (filter #(match-body? glob %))
-           first
-           :tag_name))))
+      (let [release (->> (json/read-str body :key-fn keyword)
+                         (filter #(match-body? glob %))
+                         first)
+            tag (:tag_name release)
+            artifact-url (->> release :body (re-matcher glob) re-find second)]
+        (wire->internal tag artifact-url)))))
 
-(defn main
-  [repository glob os arch artifact-suffix]
-  (let [version (fetch-jdk repository glob)
+(defn ^:private main
+  [repository glob os arch]
+  (let [jdk (fetch-jdk repository glob)
         platform (sdkman/platform os arch)
-        url (format corretto-url version version artifact-suffix)
-        sdk-version (str version suffix)]
-    (println (adapters.release/internal->wire {:url url} sdk-version platform))))
+        sdk-version (str (:version jdk) suffix)]
+    (println (adapters.release/internal->wire jdk sdk-version platform))))
 
 (defn -main
   [& args]
-  (main "corretto-8" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-  (main "corretto-8" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-  (main "corretto-8" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-  (main "corretto-8" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+  (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
+  (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
+  (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
+  (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
 
-  (main "corretto-11" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-  (main "corretto-11" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-  (main "corretto-11" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-  (main "corretto-11" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+  (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
+  (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
+  (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
+  (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
 
-  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-x64.tar.gz" "linux" "x64" "linux-x64.tar.gz")
-  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-linux-aarch64.tar.gz" "linux" "aarch64" "linux-aarch64.tar.gz")
-  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-windows-x64-jdk.zip" "windows" "x64" "windows-x64-jdk.zip")
-  (main "corretto-jdk" #"amazon-corretto-[\d.-]+-macosx-x64.tar.gz" "mac" "x64" "macosx-x64.tar.gz")
+  (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
+  (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
+  (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
+  (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
 
   (println "Amazon Corretto Done"))
