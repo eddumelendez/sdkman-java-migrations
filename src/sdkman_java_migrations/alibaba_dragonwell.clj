@@ -8,16 +8,6 @@
 (def ^:private suffix (str "-" vendor))
 (def ^:private base-url "https://api.github.com/repos/alibaba/%s/releases")
 
-(defn match-name?
-  [pattern
-   {:keys [name]}]
-  (re-find pattern name))
-
-(defn match-asset-name?
-  [pattern
-   {:keys [assets]}]
-  (filter #(match-name? pattern %) assets))
-
 (defn wire->internal
   [tag url]
   (let [version (re-find (re-matcher #"\d.[^_]+" tag))]
@@ -27,17 +17,19 @@
 (defn fetch-jdk
   [repository glob]
   (let [url (format base-url repository)
-        {:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})]
+        {:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})
+        match-name? (fn match-name? [pattern {:keys [name]}] (re-find pattern name))
+        match-asset-name? (fn match-asset-name? [pattern {:keys [assets]}] (filter #(match-name? pattern %) assets))]
     (when (= 200 status)
-      (let [release  (->> (json/read-str body :key-fn keyword)
-                          (filter #(match-asset-name? glob %))
-                          first)
+      (let [release (->> (json/read-str body :key-fn keyword)
+                         (filter #(match-asset-name? glob %))
+                         first)
             tag-name (:tag_name release)
-            url      (->> release
-                          :assets
-                          (filter #(match-name? glob %))
-                          first
-                          :browser_download_url)]
+            url (->> release
+                     :assets
+                     (filter #(match-name? glob %))
+                     first
+                     :browser_download_url)]
         (wire->internal tag-name url)))))
 
 (defn parse-version
