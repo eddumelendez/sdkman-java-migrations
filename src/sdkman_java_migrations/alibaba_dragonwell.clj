@@ -48,7 +48,7 @@
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
-  [& args]
+  []
   (main "dragonwell8" #"Alibaba_Dragonwell_.+.-GA_Linux_x64.tar.gz" "linux" "x64")
 
   (main "dragonwell11" #"OpenJDK11U-jdk_aarch64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "aarch64")

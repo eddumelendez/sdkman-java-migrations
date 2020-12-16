@@ -68,7 +68,7 @@
       (log/warn (str sdk-version " exceeds length."))))))
 
 (defn -main
-  [& args]
+  []
   (main "[8,9)" "linux" "x64" "adoptopenjdk" "hotspot")
   (main "[8,9)" "linux" "x64" "adoptopenjdk" "openj9")
 

@@ -58,7 +58,7 @@
        (log/warn (str sdk-version " exceeds length."))))))
 
 (defn -main
-  [& args]
+  []
   (main "8" "linux" "arm")
   (main "8" "linux" "x86")
   (main "8" "macos" "x86")

@@ -66,7 +66,7 @@
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
-  [& args]
+  []
 
   (main 17 #"https.+.openjdk-.+._linux-aarch64_bin.tar.gz" "linux" "aarch64")
   (main 17 #"https.+.openjdk-.+._linux-x64_bin.tar.gz" "linux" "x64")

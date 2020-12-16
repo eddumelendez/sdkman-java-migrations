@@ -1,6 +1,6 @@
 # sdkman-java-migrations
 
-The source code in this repository is used by GitHub actions to find the latest version of a given Java vendor and post it to [SDKMAN!](https://github.com/sdkman/). 
+The source code in this repository is used by GitHub actions to find the latest version of a given Java vendor and post it to [SDKMAN!](https://github.com/sdkman/).
 
 * AdoptOpenJDK
 
@@ -22,7 +22,7 @@ The `azul-zulu` namespace fetch [Azul Zulu API](https://app.swaggerhub.com/apis-
 
 The `bellsoft-liberica` namespace fetch [Bellsoft Liberica API](https://api.bell-sw.com/api.html) for new versions.
 
-* GraalVM 
+* GraalVM
 
 The `graalvm` namespace fetch [GraalVM Repository](https://github.com/graalvm/graalvm-ce-builds) for new versions.
 

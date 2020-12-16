@@ -42,7 +42,7 @@
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
-  [& args]
+  []
   (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
   (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
   (main "corretto-8" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")

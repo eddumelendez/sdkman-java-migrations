@@ -2,7 +2,6 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.broadcast :as adapters.broadcast]
             [sdkman-java-migrations.adapters.release :as adapters.release]
             [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
@@ -50,7 +49,7 @@
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
-  [& args]
+  []
   (main "11" "linux" "aarch64")
   (main "11" "linux" "x64")
   (main "11" "osx" "x64")

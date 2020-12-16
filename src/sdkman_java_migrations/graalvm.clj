@@ -58,7 +58,7 @@
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
-  [& args]
+  []
   (main 8 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
   (main 8 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 8 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
