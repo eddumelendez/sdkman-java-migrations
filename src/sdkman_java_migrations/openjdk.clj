@@ -2,8 +2,10 @@
   (:require [clj-http.client :as client]
             [clojure.data.xml :as xml]
             [clojure.data.zip.xml :as zip-xml]
+            [clojure.tools.logging :as log]
             [clojure.zip :as zip]
             [sdkman-java-migrations.adapters.release :as adapters.release]
+            [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]
             [clojure.string :as str]))
 
@@ -59,7 +61,9 @@
   (let [jdk (fetch-jdk version glob)
         platform (sdkman/platform os arch)
         sdk-version (parse-version version jdk)]
-    (println (-> (adapters.release/internal->wire jdk sdk-version platform)))))
+    (if (logic.version/is-valid? sdk-version)
+      (println (-> (adapters.release/internal->wire jdk sdk-version platform)))
+      (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
   [& args]

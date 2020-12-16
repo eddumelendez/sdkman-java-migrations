@@ -1,7 +1,9 @@
 (ns sdkman-java-migrations.graalvm
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [sdkman-java-migrations.adapters.release :as adapters.release]
+            [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
 (def ^:private vendor "grl")
@@ -51,7 +53,9 @@
   (let [jdk (fetch-jdk glob)
         platform (sdkman/platform os arch)
         sdk-version (parse-version version jdk)]
-    (println (adapters.release/internal->wire jdk sdk-version platform))))
+    (if (logic.version/is-valid? sdk-version)
+      (println (adapters.release/internal->wire jdk sdk-version platform))
+      (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
   [& args]

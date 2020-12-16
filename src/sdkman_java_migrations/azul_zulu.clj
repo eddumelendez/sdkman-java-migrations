@@ -1,7 +1,9 @@
 (ns sdkman-java-migrations.azul-zulu
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [sdkman-java-migrations.adapters.release :as adapters.release]
+            [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
 (def ^:private vendor "zulu")
@@ -49,8 +51,11 @@
   ([version os arch fx]
    (let [os'      (if (= os "macos") "mac" os)
          platform (sdkman/platform os' arch)
-         last-jdk (fetch-jdk version os arch fx)]
-     (println (adapters.release/internal->wire last-jdk (parse-version last-jdk fx) platform)))))
+         last-jdk (fetch-jdk version os arch fx)
+         sdk-version (parse-version last-jdk fx)]
+     (if (logic.version/is-valid? sdk-version)
+       (println (adapters.release/internal->wire last-jdk sdk-version platform))
+       (log/warn (str sdk-version " exceeds length."))))))
 
 (defn -main
   [& args]

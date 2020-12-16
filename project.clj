@@ -7,7 +7,8 @@
                  [org.clojure/clojure "1.10.1"]
                  [org.clojure/data.json "0.2.6"]
                  [org.clojure/data.xml "0.0.8"]
-                 [org.clojure/data.zip "1.0.0"]]
+                 [org.clojure/data.zip "1.0.0"]
+                 [org.clojure/tools.logging "1.1.0"]]
   :main ^:skip-aot sdkman-java-migrations.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

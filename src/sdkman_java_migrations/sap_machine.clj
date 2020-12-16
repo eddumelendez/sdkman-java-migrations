@@ -1,8 +1,10 @@
 (ns sdkman-java-migrations.sap-machine
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [sdkman-java-migrations.adapters.broadcast :as adapters.broadcast]
             [sdkman-java-migrations.adapters.release :as adapters.release]
+            [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
 (def ^:private vendor "sapmchn")
@@ -42,9 +44,10 @@
   (let [os' (if (= os "osx") "mac" os)
         platform (sdkman/platform os' arch)
         jdk (fetch-jdk version os arch)
-        version' (parse-version jdk)]
-    (println (-> (adapters.release/internal->wire jdk version' platform)))
-    ))
+        sdk-version (parse-version jdk)]
+    (if (logic.version/is-valid? sdk-version)
+      (println (-> (adapters.release/internal->wire jdk sdk-version platform)))
+      (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
   [& args]

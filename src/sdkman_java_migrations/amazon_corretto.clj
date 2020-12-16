@@ -1,7 +1,9 @@
 (ns sdkman-java-migrations.amazon-corretto
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [sdkman-java-migrations.adapters.release :as adapters.release]
+            [sdkman-java-migrations.logic.version :as logic.version]
             [sdkman-java-migrations.util.sdkman :as sdkman]))
 
 (def ^:private vendor "amzn")
@@ -35,7 +37,9 @@
   (let [jdk (fetch-jdk repository glob)
         platform (sdkman/platform os arch)
         sdk-version (str (:version jdk) suffix)]
-    (println (adapters.release/internal->wire jdk sdk-version platform))))
+    (if (logic.version/is-valid? sdk-version)
+      (println (adapters.release/internal->wire jdk sdk-version platform))
+      (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
   [& args]
