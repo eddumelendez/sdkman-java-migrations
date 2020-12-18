@@ -114,4 +114,4 @@
   (main "[11,12)" "linux" "x64" "openjdk")
   (main "[11,12)" "windows" "x64" "openjdk")
 
-  (println "AdoptOpenJDK Done"))
+  (log/info "AdoptOpenJDK Done"))

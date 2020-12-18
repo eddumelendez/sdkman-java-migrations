@@ -84,4 +84,6 @@
 
   (main "15" "linux" "x86" true)
   (main "15" "macos" "x86" true)
-  (main "15" "windows" "x86" true))
+  (main "15" "windows" "x86" true)
+
+  (log/info "Azul Zulu Done"))

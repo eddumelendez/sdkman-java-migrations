@@ -68,4 +68,4 @@
   (main 11 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 11 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
 
-  (println "GraalVM Done"))
+  (log/info "GraalVM Done"))

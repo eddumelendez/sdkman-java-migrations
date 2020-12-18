@@ -58,4 +58,4 @@
   (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
   (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
 
-  (println "Amazon Corretto Done"))
+  (log/info "Amazon Corretto Done"))

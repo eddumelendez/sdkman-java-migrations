@@ -55,4 +55,4 @@
   (main "dragonwell11" #"OpenJDK11U-jdk_x64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "x64")
   (main "dragonwell11" #"OpenJDK11U-jdk_x64_windows_dragonwell_dragonwell-.+.zip" "windows" "x64")
 
-  (println "Alibaba Dragonwell Done"))
+  (log/info "Alibaba Dragonwell Done"))

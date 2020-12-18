@@ -58,4 +58,6 @@
   (main "15" "linux" "aarch64")
   (main "15" "linux" "x64")
   (main "15" "osx" "x64")
-  (main "15" "windows" "x64"))
+  (main "15" "windows" "x64")
+
+  (log/info "SapMachine Done"))

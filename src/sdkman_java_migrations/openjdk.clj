@@ -86,4 +86,4 @@
   (main "panama" #"https.+.openjdk-.+._osx-x64_bin.tar.gz" "mac" "x64")
   (main "panama" #"https.+.openjdk-.+._windows-x64_bin.zip" "windows" "x64")
 
-  (println "OpenJDK Done"))
+  (log/info "OpenJDK Done"))
