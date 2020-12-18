@@ -2,9 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.util.sdkman :as sdkman]
-            [sdkman-java-migrations.logic.version :as logic.version])
+            [sdkman-java-migrations.controller.version :as controller.version])
   (:import [java.net URLEncoder]))
 
 (def ^:private vendor "adpt")
@@ -60,12 +58,9 @@
   ([version os arch vendor]
    (main version os arch vendor nil))
   ([version os arch vendor impl]
-  (let [platform (sdkman/platform os arch)
-        last-jdk (fetch-jdk version arch impl os vendor)
-        sdk-version (parse-version last-jdk vendor impl)]
-    (if (logic.version/is-valid? sdk-version)
-      (println (adapters.release/internal->wire last-jdk vendor sdk-version platform))
-      (log/warn (str sdk-version " exceeds length."))))))
+  (let [jdk (fetch-jdk version arch impl os vendor)
+        sdk-version (parse-version jdk vendor impl)]
+    (controller.version/migrate! jdk vendor sdk-version os arch))))
 
 (defn -main
   []

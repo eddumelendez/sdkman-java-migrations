@@ -2,9 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.logic.version :as logic.version]
-            [sdkman-java-migrations.util.sdkman :as sdkman]))
+            [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "albba")
 (def ^:private suffix (str "-" vendor))
@@ -41,11 +39,8 @@
 (defn main
   [repository glob os arch]
   (let [jdk (fetch-jdk repository glob)
-        platform (sdkman/platform os arch)
         sdk-version (parse-version jdk)]
-    (if (logic.version/is-valid? sdk-version)
-      (println (-> (adapters.release/internal->wire jdk vendor sdk-version platform)))
-      (log/warn (str sdk-version " exceeds length.")))))
+    (controller.version/migrate! jdk vendor sdk-version os arch)))
 
 (defn -main
   []

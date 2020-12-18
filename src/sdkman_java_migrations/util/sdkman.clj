@@ -1,29 +1,15 @@
 (ns sdkman-java-migrations.util.sdkman
   (:require [clj-http.client :as client]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [slingshot.slingshot :refer [try+]]))
 
 (def ^:private vendor-release-url "https://vendors.sdkman.io/release")
 (def ^:private broadcast-url "https://vendors.sdkman.io/announce/struct")
+(def ^:private broker-url "https://api.sdkman.io/2/broker/download/java/%s/%s")
 
 (def ^:private credentials
   {"Consumer-Key"   (System/getenv "CONSUMER_KEY")
    "Consumer-Token" (System/getenv "CONSUMER_TOKEN")})
-
-(def ^:private platforms
-  {:linux   {:x64 "LINUX_64"
-             :x86 "LINUX_64"
-             :aarch64 "LINUX_ARM64"
-             :arm "LINUX_ARM64"}
-   :mac     {:x64 "MAC_OSX"
-             :x86 "MAC_OSX"}
-   :windows {:x64 "WINDOWS_64"
-             :x86 "WINDOWS_64"}})
-
-(defn platform
-  [os arch]
-  (let [os'   (keyword os)
-        arch' (keyword arch)]
-    (-> platforms os' arch')))
 
 (defn new-version
   [request]
@@ -38,3 +24,11 @@
                               :accept       :json
                               :content-type :json
                               :body         (json/write-str request)}))
+
+(defn find-version
+  [version platform]
+  (let [url (format broker-url version platform)]
+    (try+
+      (client/get url {:redirect-strategy :none})
+      (catch [:status 404] {:keys [status]}
+        {:status status}))))

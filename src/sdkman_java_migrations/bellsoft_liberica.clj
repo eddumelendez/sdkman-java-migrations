@@ -2,9 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.logic.version :as logic.version]
-            [sdkman-java-migrations.util.sdkman :as sdkman]))
+            [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "librca")
 (def ^:private suffix (str "-" vendor))
@@ -51,12 +49,9 @@
    (main version-feature os arch false))
   ([version-feature os arch fx]
    (let [os' (if (= os "macos") "mac" os)
-         platform (sdkman/platform os' arch)
-         last-jdk (fetch-jdk arch os version-feature fx)
-         sdk-version (parse-version last-jdk fx)]
-     (if (logic.version/is-valid? sdk-version)
-       (println (adapters.release/internal->wire last-jdk vendor sdk-version platform))
-       (log/warn (str sdk-version " exceeds length."))))))
+         jdk (fetch-jdk arch os version-feature fx)
+         sdk-version (parse-version jdk fx)]
+     (controller.version/migrate! jdk vendor sdk-version os' arch))))
 
 (defn -main
   []

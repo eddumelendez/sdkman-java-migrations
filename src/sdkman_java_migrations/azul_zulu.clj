@@ -2,9 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.logic.version :as logic.version]
-            [sdkman-java-migrations.util.sdkman :as sdkman]))
+            [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "zulu")
 (def ^:private suffix (str "-" vendor))
@@ -49,13 +47,10 @@
   ([version os arch]
    (main version os arch false))
   ([version os arch fx]
-   (let [os'      (if (= os "macos") "mac" os)
-         platform (sdkman/platform os' arch)
-         last-jdk (fetch-jdk version os arch fx)
-         sdk-version (parse-version last-jdk fx)]
-     (if (logic.version/is-valid? sdk-version)
-       (println (adapters.release/internal->wire last-jdk vendor sdk-version platform))
-       (log/warn (str sdk-version " exceeds length."))))))
+   (let [os' (if (= os "macos") "mac" os)
+         jdk (fetch-jdk version os arch fx)
+         sdk-version (parse-version jdk fx)]
+     (controller.version/migrate! jdk vendor sdk-version os' arch))))
 
 (defn -main
   []

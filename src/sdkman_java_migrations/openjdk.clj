@@ -2,12 +2,10 @@
   (:require [clj-http.client :as client]
             [clojure.data.xml :as xml]
             [clojure.data.zip.xml :as zip-xml]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [clojure.zip :as zip]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.logic.version :as logic.version]
-            [sdkman-java-migrations.util.sdkman :as sdkman]
-            [clojure.string :as str]))
+            [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "open")
 (def ^:private suffix (str "-" vendor))
@@ -59,11 +57,8 @@
 (defn ^:private main
   [version glob os arch]
   (let [jdk (fetch-jdk version glob)
-        platform (sdkman/platform os arch)
         sdk-version (parse-version version jdk)]
-    (if (logic.version/is-valid? sdk-version)
-      (println (-> (adapters.release/internal->wire jdk sdk-version vendor platform)))
-      (log/warn (str sdk-version " exceeds length.")))))
+    (controller.version/migrate! jdk vendor sdk-version os arch)))
 
 (defn -main
   []

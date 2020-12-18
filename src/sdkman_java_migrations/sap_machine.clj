@@ -2,9 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log]
-            [sdkman-java-migrations.adapters.release :as adapters.release]
-            [sdkman-java-migrations.logic.version :as logic.version]
-            [sdkman-java-migrations.util.sdkman :as sdkman]))
+            [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "sapmchn")
 (def ^:private suffix (str "-" vendor))
@@ -23,9 +21,8 @@
 
 (defn ^:private fetch-jdk
   [version os arch]
-  (let [url (format base-url)
-        version' (keyword version)
-        {:keys [status body]} (client/get url)]
+  (let [version' (keyword version)
+        {:keys [status body]} (client/get base-url)]
     (when (= 200 status)
       (-> (json/read-str body :key-fn keyword)
           :assets
@@ -41,12 +38,9 @@
 (defn ^:private main
   [version os arch]
   (let [os' (if (= os "osx") "mac" os)
-        platform (sdkman/platform os' arch)
         jdk (fetch-jdk version os arch)
         sdk-version (parse-version jdk)]
-    (if (logic.version/is-valid? sdk-version)
-      (println (-> (adapters.release/internal->wire jdk vendor sdk-version platform)))
-      (log/warn (str sdk-version " exceeds length.")))))
+    (controller.version/migrate! jdk vendor sdk-version os' arch)))
 
 (defn -main
   []
