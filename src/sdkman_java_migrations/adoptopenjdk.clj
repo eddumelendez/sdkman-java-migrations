@@ -64,7 +64,7 @@
         last-jdk (fetch-jdk version arch impl os vendor)
         sdk-version (parse-version last-jdk vendor impl)]
     (if (logic.version/is-valid? sdk-version)
-      (println (adapters.release/internal->wire last-jdk sdk-version platform))
+      (println (adapters.release/internal->wire last-jdk vendor sdk-version platform))
       (log/warn (str sdk-version " exceeds length."))))))
 
 (defn -main

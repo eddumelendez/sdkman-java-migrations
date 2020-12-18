@@ -54,7 +54,7 @@
         platform (sdkman/platform os arch)
         sdk-version (parse-version version jdk)]
     (if (logic.version/is-valid? sdk-version)
-      (println (adapters.release/internal->wire jdk sdk-version platform))
+      (println (adapters.release/internal->wire jdk vendor sdk-version platform))
       (log/warn (str sdk-version " exceeds length.")))))
 
 (defn -main
