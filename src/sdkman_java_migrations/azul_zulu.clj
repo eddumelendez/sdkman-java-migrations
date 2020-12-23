@@ -56,17 +56,20 @@
   []
   (main "8" "linux" "arm")
   (main "8" "linux" "x86")
+  (main "8" "macos" "arm")
   (main "8" "macos" "x86")
   (main "8" "windows" "x86")
 
   (main "11" "linux" "arm")
   (main "11" "linux" "x86")
+  (main "11" "macos" "arm")
   (main "11" "macos" "x86")
   (main "11" "windows" "x86")
 
   (main "15" "linux" "arm")
   (main "15" "linux" "x86")
   (main "15" "macos" "x86")
+  (main "15" "macos" "arm")
   (main "15" "windows" "x86")
 
   (main "8" "linux" "x86" true)

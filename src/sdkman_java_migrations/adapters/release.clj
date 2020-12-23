@@ -6,7 +6,8 @@
              :aarch64 "LINUX_ARM64"
              :arm "LINUX_ARM64"}
    :mac     {:x64 "MAC_OSX"
-             :x86 "MAC_OSX"}
+             :x86 "MAC_OSX"
+             :arm "MAC_ARM64"}
    :windows {:x64 "WINDOWS_64"
              :x86 "WINDOWS_64"}})
 
