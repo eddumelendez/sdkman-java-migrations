@@ -4,7 +4,7 @@
   {:linux   {:x64     "linux64"
              :x86     "linux64"
              :aarch64 "linuxarm64"
-             :arm     "LINUX_ARM64"}
+             :arm     "linuxarm64"}
    :mac     {:x64 "darwin"
              :x86 "darwin"}
    :windows {:x64 "msys"
