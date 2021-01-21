@@ -52,7 +52,7 @@
       (str version "." (implementation implementations) suffix))
 
     (= vendor "openjdk")
-    (str version ".open" suffix)))
+    (str version "-open")))
 
 (defn main
   ([version os arch vendor]
@@ -106,6 +106,7 @@
   (main "[8,9)" "linux" "x64" "openjdk")
   (main "[8,9)" "windows" "x64" "openjdk")
 
+  (main "[11,12)" "linux" "aarch64" "openjdk")
   (main "[11,12)" "linux" "x64" "openjdk")
   (main "[11,12)" "windows" "x64" "openjdk")
 
