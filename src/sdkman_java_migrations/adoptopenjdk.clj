@@ -27,7 +27,7 @@
 
 (defn wire->internal
   [{:keys [binaries version_data]}]
-  {:version (:semver version_data)
+  {:version (->> version_data :semver (re-matcher #"(\d.[^-ea+]+)") re-find first)
    :url     (-> binaries first :package :link)})
 
 (defn fetch-jdk
@@ -54,13 +54,20 @@
     (= vendor "openjdk")
     (str version "-open")))
 
+(defn resolve-vendor
+  [vendor-name]
+  (let [vendors {:adoptopenjdk vendor
+                 :openjdk "open"}]
+    ((keyword vendor-name) vendors)))
+
 (defn main
   ([version os arch vendor]
    (main version os arch vendor nil))
   ([version os arch vendor impl]
   (let [jdk (fetch-jdk version arch impl os vendor)
-        sdk-version (parse-version jdk vendor impl)]
-    (controller.version/migrate! jdk vendor sdk-version os arch))))
+        sdk-version (parse-version jdk vendor impl)
+        sdk-vendor (resolve-vendor vendor)]
+    (controller.version/migrate! jdk sdk-vendor sdk-version os arch))))
 
 (defn -main
   []
@@ -99,9 +106,6 @@
 
   (main "[15,16)"  "mac" "x64" "adoptopenjdk" "hotspot")
   (main "[15,16)" "mac" "x64" "adoptopenjdk" "openj9")
-
-  (main "[8,9)" "linux" "x64" "adoptopenjdk" "hotspot")
-  (main "[8,9)" "linux" "x64" "adoptopenjdk" "openj9")
 
   (main "[8,9)" "linux" "x64" "openjdk")
   (main "[8,9)" "windows" "x64" "openjdk")
