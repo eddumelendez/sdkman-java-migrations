@@ -21,3 +21,6 @@ jobs:
           java-version: 8
       - name: Run adoptopenjdk
         run: lein run -m sdkman-java-migrations.adoptopenjdk
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_TOKEN: ${{ secrets.CONSUMER_TOKEN }}

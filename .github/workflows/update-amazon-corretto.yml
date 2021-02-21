@@ -21,3 +21,6 @@ jobs:
           java-version: 8
       - name: Run amazon-corretto
         run: lein run -m sdkman-java-migrations.amazon-corretto
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_TOKEN: ${{ secrets.CONSUMER_TOKEN }}
