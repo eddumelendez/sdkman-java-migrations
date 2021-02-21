@@ -1,6 +1,7 @@
 (ns sdkman-java-migrations.graalvm
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]
+            [clojure.string :as str]
             [clojure.tools.logging :as log]
             [sdkman-java-migrations.controller.version :as controller.version]))
 
@@ -13,11 +14,6 @@
    {:keys [name]}]
   (re-find pattern name))
 
-(defn match-asset-name?
-  [pattern
-   {:keys [assets]}]
-  (filter #(match-name? pattern %) assets))
-
 (defn wire->internal
   [tag url]
   (let [version (re-find (re-matcher #"\d.*" tag))]
@@ -25,11 +21,11 @@
      :url     url}))
 
 (defn fetch-jdk
-  [glob]
+  [glob graal-version]
   (let [{:keys [status body]} (client/get url {:headers {"Authorization" (str "token " (System/getenv "GITHUB_TOKEN"))}})]
     (when (= 200 status)
       (let [release  (->> (json/read-str body :key-fn keyword)
-                          (filter #(match-asset-name? glob %))
+                          (filter #(str/includes? (:tag_name %) (str graal-version)))
                           first)
             tag-name (:tag_name release)
             url      (->> release
@@ -47,20 +43,38 @@
     (str version ".r11" suffix)))
 
 (defn main
-  [version glob os arch]
-  (let [jdk (fetch-jdk glob)
+  [version graal-version glob os arch]
+  (let [jdk (fetch-jdk glob graal-version)
         sdk-version (parse-version version jdk)]
     (controller.version/migrate! jdk vendor sdk-version os arch)))
 
 (defn -main
   []
-  (main 8 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
-  (main 8 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
-  (main 8 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
+  (main 8 21 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 8 21 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 8 21 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
 
-  (main 11 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
-  (main 11 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
-  (main 11 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
-  (main 11 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
+  (main 11 21 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 21 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 11 21 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 11 21 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
+
+  (main 8 20 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 8 20 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 8 20 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
+
+  (main 11 20 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 20 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 11 20 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 11 20 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
+
+  (main 8 19 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 8 19 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 8 19 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
+
+  (main 11 19 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 19 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 11 19 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 11 19 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
 
   (log/info "GraalVM Done"))
