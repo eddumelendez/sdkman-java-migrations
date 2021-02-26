@@ -14,7 +14,7 @@
 
 (defn ^:private wire->internal
   [url]
-  {:version (second (re-find (re-matcher #"[^\w](\d.[-|\.][^_]+)" url)))
+  {:version (second (re-find (re-matcher #"openjdk-(\d.[-|\.][^_]+|\d+)" url)))
    :url     url})
 
 (defn ^:private substring
