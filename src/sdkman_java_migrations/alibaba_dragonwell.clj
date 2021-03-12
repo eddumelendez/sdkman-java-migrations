@@ -44,7 +44,8 @@
 
 (defn -main
   []
-  (main "dragonwell8" #"Alibaba_Dragonwell_.+.-GA_Linux_x64.tar.gz" "linux" "x64")
+  (main "dragonwell8" #"Alibaba_Dragonwell_.+._GA_Linux_aarch64.tar.gz" "linux" "aarch64")
+  (main "dragonwell8" #"Alibaba_Dragonwell_.+._GA_Linux_x64.tar.gz" "linux" "x64")
 
   (main "dragonwell11" #"OpenJDK11U-jdk_aarch64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "aarch64")
   (main "dragonwell11" #"OpenJDK11U-jdk_x64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "x64")
