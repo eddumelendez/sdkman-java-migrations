@@ -49,9 +49,9 @@
   (main "11" "osx" "x64")
   (main "11" "windows" "x64")
 
-  (main "15" "linux" "aarch64")
-  (main "15" "linux" "x64")
-  (main "15" "osx" "x64")
-  (main "15" "windows" "x64")
+  (main "16" "linux" "aarch64")
+  (main "16" "linux" "x64")
+  (main "16" "osx" "x64")
+  (main "16" "windows" "x64")
 
   (log/info "SapMachine Done"))
