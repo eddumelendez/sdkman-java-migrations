@@ -27,7 +27,7 @@
 
 (defn ^:private fetch-jdk
   [version glob]
-  (let [url (str base-url version)
+  (let [url (str base-url version "/")
         {:keys [status body]} (client/get url)
         href-attr-match? (fn [loc] (re-find glob (zip-xml/attr loc :href)))]
     (when (= 200 status)
