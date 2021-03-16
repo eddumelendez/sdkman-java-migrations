@@ -24,3 +24,4 @@ jobs:
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_TOKEN: ${{ secrets.CONSUMER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
