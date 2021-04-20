@@ -5,7 +5,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "zulu")
-(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   (str "https://api.azul.com/zulu/download/community/v1.0/bundles/latest/"
@@ -40,8 +39,8 @@
   [{:keys [version]}
    fx]
   (if fx
-    (str version ".fx" suffix)
-    (str version suffix)))
+    (str version ".fx")
+    version))
 
 (defn main
   ([version os arch]
@@ -54,6 +53,10 @@
 
 (defn -main
   []
+  (main "7" "linux" "x86")
+  (main "7" "macos" "x86")
+  (main "7" "windows" "x86")
+
   (main "8" "linux" "arm")
   (main "8" "linux" "x86")
   (main "8" "macos" "arm")

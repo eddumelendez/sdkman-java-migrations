@@ -5,7 +5,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "amzn")
-(def ^:private suffix (str "-" vendor))
 (def ^:private base-url "https://api.github.com/repos/corretto/%s/releases")
 
 (defn ^:private match-body?
@@ -32,9 +31,8 @@
 
 (defn ^:private main
   [repository glob os arch]
-  (let [jdk (fetch-jdk repository glob)
-        sdk-version (str (:version jdk) suffix)]
-    (controller.version/migrate! jdk vendor sdk-version os arch)))
+  (let [jdk (fetch-jdk repository glob)]
+    (controller.version/migrate! jdk vendor (:version jdk) os arch)))
 
 (defn -main
   []

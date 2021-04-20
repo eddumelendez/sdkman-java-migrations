@@ -6,7 +6,6 @@
   (:import [java.net URLEncoder]))
 
 (def ^:private vendor "adpt")
-(def ^:private suffix (str "-" vendor))
 
 (def ^:private implementations
   {:hotspot "hs"
@@ -49,10 +48,10 @@
   (cond
     (= vendor "adoptopenjdk")
     (let [implementation (keyword impl)]
-      (str version "." (implementation implementations) suffix))
+      (str version "." (implementation implementations)))
 
     (= vendor "openjdk")
-    (str version "-open")))
+    version))
 
 (defn resolve-vendor
   [vendor-name]
@@ -107,6 +106,7 @@
   (main "[16,17)"  "mac" "x64" "adoptopenjdk" "hotspot")
   (main "[16,17)" "mac" "x64" "adoptopenjdk" "openj9")
 
+  (main "[8,9)" "linux" "aarch64" "openjdk")
   (main "[8,9)" "linux" "x64" "openjdk")
   (main "[8,9)" "windows" "x64" "openjdk")
 

@@ -5,7 +5,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "albba")
-(def ^:private suffix (str "-" vendor))
 (def ^:private base-url "https://api.github.com/repos/alibaba/%s/releases")
 
 (defn wire->internal
@@ -32,15 +31,10 @@
                      :browser_download_url)]
         (wire->internal tag-name url)))))
 
-(defn parse-version
-  [{:keys [version]}]
-  (str version suffix))
-
 (defn main
   [repository glob os arch]
-  (let [jdk (fetch-jdk repository glob)
-        sdk-version (parse-version jdk)]
-    (controller.version/migrate! jdk vendor sdk-version os arch)))
+  (let [jdk (fetch-jdk repository glob)]
+    (controller.version/migrate! jdk vendor (:version jdk) os arch)))
 
 (defn -main
   []

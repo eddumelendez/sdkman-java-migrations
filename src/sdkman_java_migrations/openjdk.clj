@@ -8,7 +8,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "open")
-(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url "https://jdk.java.net/")
 
@@ -46,13 +45,13 @@
         replace-fn (fn [version pattern] (-> version (str/replace pattern ".ea.") (str/replace #"-\d{1,3}" "")))]
     (cond
       (= version "loom")
-      (str (replace-fn jdk-version #"-loom\+") ".lm" suffix)
+      (str (replace-fn jdk-version #"-loom\+") ".lm")
 
       (= version "panama")
-      (str (replace-fn jdk-version #"-panama\+") ".pma" suffix)
+      (str (replace-fn jdk-version #"-panama\+") ".pma")
 
       :else
-      (str (str/replace jdk-version #"-|\+" ".") suffix))))
+      (str/replace jdk-version #"-|\+" "."))))
 
 (defn ^:private main
   [version glob os arch]

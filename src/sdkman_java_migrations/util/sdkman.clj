@@ -26,8 +26,8 @@
                               :body         (json/write-str request)}))
 
 (defn find-version
-  [version platform]
-  (let [url (format broker-url version platform)]
+  [version+vendor platform]
+  (let [url (format broker-url version+vendor platform)]
     (try+
       (client/get url {:redirect-strategy :none})
       (catch [:status 404] {:keys [status]}

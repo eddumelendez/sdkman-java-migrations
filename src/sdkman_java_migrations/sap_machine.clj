@@ -5,7 +5,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "sapmchn")
-(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   "https://sap.github.io/SapMachine/assets/data/sapmachine_releases.json")
@@ -31,16 +30,11 @@
           first
           (wire->internal os arch)))))
 
-(defn ^:private parse-version
-  [{:keys [version]}]
-  (str version suffix))
-
 (defn ^:private main
   [version os arch]
   (let [os' (if (= os "osx") "mac" os)
-        jdk (fetch-jdk version os arch)
-        sdk-version (parse-version jdk)]
-    (controller.version/migrate! jdk vendor sdk-version os' arch)))
+        jdk (fetch-jdk version os arch)]
+    (controller.version/migrate! jdk vendor (:version jdk) os' arch)))
 
 (defn -main
   []

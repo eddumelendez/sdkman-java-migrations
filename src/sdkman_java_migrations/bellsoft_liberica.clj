@@ -5,7 +5,6 @@
             [sdkman-java-migrations.controller.version :as controller.version]))
 
 (def ^:private vendor "librca")
-(def ^:private suffix (str "-" vendor))
 
 (def ^:private base-url
   (str "https://api.bell-sw.com/v1/liberica/releases"
@@ -41,8 +40,8 @@
 (defn ^:private parse-version
   [{:keys [version]} fx]
   (if fx
-    (str version ".fx" suffix)
-    (str version suffix)))
+    (str version ".fx")
+    version))
 
 (defn ^:private main
   ([version-feature os arch]
