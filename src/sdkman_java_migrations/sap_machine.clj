@@ -14,16 +14,18 @@
    os
    arch]
   (let [os-arch (keyword (str os "-" arch))
-        version (re-find (re-matcher #"\d.*" tag))]
-    {:version version
-     :url     (-> jdk os-arch)}))
+        version (re-find (re-matcher #"\d.*" tag))
+        url (-> jdk os-arch)]
+    (when url
+      {:version version
+       :url     url})))
 
 (defn ^:private fetch-jdk
   [version os arch]
   (let [version' (keyword version)
         {:keys [status body]} (client/get base-url)]
     (when (= 200 status)
-      (-> (json/read-str body :key-fn keyword)
+      (some-> (json/read-str body :key-fn keyword)
           :assets
           version'
           :releases
@@ -34,7 +36,8 @@
   [version os arch]
   (let [os' (if (= os "osx") "mac" os)
         jdk (fetch-jdk version os arch)]
-    (controller.version/migrate! jdk vendor (:version jdk) os' arch)))
+    (some-> jdk
+            (controller.version/migrate! vendor (:version jdk) os' arch))))
 
 (defn -main
   []
