@@ -15,8 +15,8 @@
 
 (defn wire->internal
   [tag url]
-  (let [version (re-find (re-matcher #"\d.*" tag))]
-    {:version version
+  (when url
+    {:version (re-find (re-matcher #"\d.*" tag))
      :url     url}))
 
 (defn fetch-jdk
@@ -51,7 +51,8 @@
   [version graal-version glob os arch]
   (let [jdk (fetch-jdk glob graal-version)
         sdk-version (parse-version version jdk)]
-    (controller.version/migrate! jdk vendor sdk-version os arch)))
+    (some-> jdk
+            (controller.version/migrate! vendor sdk-version os arch))))
 
 (defn -main
   []
@@ -73,7 +74,7 @@
   ;(main 8 20 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 8 20 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
 
-  ;(main 11 20 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 20 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
   (main 11 20 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
   (main 11 20 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 11 20 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
@@ -82,7 +83,7 @@
   ;(main 8 19 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 8 19 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
 
-  ;(main 11 19 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 19 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
   (main 11 19 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
   (main 11 19 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 11 19 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
