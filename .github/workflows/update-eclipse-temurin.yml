@@ -1,4 +1,4 @@
-name: Update AdoptOpenJDK
+name: Update Eclipse Temurin
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   run:
-    name: "Run Java Migration for AdoptOpenJDK"
+    name: "Run Java Migration for Eclipse Temurin"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,8 +21,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8
-      - name: Run adoptopenjdk
-        run: lein run -m sdkman-java-migrations.adoptopenjdk
+      - name: Run eclipse-temurin
+        run: lein run -m sdkman-java-migrations.eclipse-temurin
         env:
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_TOKEN: ${{ secrets.CONSUMER_TOKEN }}

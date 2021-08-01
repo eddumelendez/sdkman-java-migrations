@@ -2,10 +2,6 @@
 
 The source code in this repository is used by GitHub actions to find the latest version of a given Java vendor and post it to [SDKMAN!](https://github.com/sdkman/).
 
-* AdoptOpenJDK
-
-The `adoptopenjdk` namespace fetch [AdoptOpenJDK API](https://api.adoptopenjdk.net/swagger-ui/) for new versions for `hotspot` and `openj9`.
-
 * Alibaba Dragonwell
 
 The `alibaba-dragonwell` namespace fetch [Alibaba repositories](https://github.com/alibaba/) for new versions.
@@ -21,6 +17,10 @@ The `azul-zulu` namespace fetch [Azul Zulu API](https://app.swaggerhub.com/apis-
 * Bellsoft Liberica
 
 The `bellsoft-liberica` namespace fetch [Bellsoft Liberica API](https://api.bell-sw.com/api.html) for new versions.
+
+* Eclipse Temurin
+
+The `eclipse-temurin` namespace fetch [Adoptium API](https://api.adoptium.net/swagger-ui/) for new versions.
 
 * GraalVM
 
