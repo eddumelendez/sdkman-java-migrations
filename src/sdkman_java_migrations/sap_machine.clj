@@ -41,6 +41,12 @@
 
 (defn -main
   []
+  (main "17" "linux" "aarch64")
+  (main "17" "linux" "x64")
+  (main "17" "osx" "aarch64")
+  (main "17" "osx" "x64")
+  (main "17" "windows" "x64")
+
   (main "11" "linux" "aarch64")
   (main "11" "linux" "x64")
   (main "11" "osx" "x64")
