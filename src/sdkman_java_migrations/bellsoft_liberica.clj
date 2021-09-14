@@ -33,9 +33,9 @@
         url (format base-url arch bundle-type os ((keyword os) package-type) version-feature)
         {:keys [status body]} (client/get url)]
     (when (= 200 status)
-      (->> (json/read-str body :key-fn keyword)
-           first
-           (wire->internal)))))
+      (some->> (json/read-str body :key-fn keyword)
+               first
+               (wire->internal)))))
 
 (defn ^:private parse-version
   [{:keys [version]} fx]
@@ -50,7 +50,8 @@
    (let [os' (if (= os "macos") "mac" os)
          jdk (fetch-jdk arch os version-feature fx)
          sdk-version (parse-version jdk fx)]
-     (controller.version/migrate! jdk vendor sdk-version os' arch))))
+     (some-> jdk
+             (controller.version/migrate! vendor sdk-version os' arch)))))
 
 (defn -main
   []
