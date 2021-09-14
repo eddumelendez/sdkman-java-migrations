@@ -30,7 +30,7 @@
 (defn fetch-jdk
   [version os arch fx]
   (let [url (format base-url version os arch ((keyword os) ext) fx)
-        {:keys [status body]} (client/get url)]
+        {:keys [status body]} (client/get url {:throw-exceptions false})]
     (when (= 200 status)
       (->> (json/read-str body :key-fn keyword)
            (wire->internal)))))
@@ -49,7 +49,8 @@
    (let [os' (if (= os "macos") "mac" os)
          jdk (fetch-jdk version os arch fx)
          sdk-version (parse-version jdk fx)]
-     (controller.version/migrate! jdk vendor sdk-version os' arch))))
+     (some-> jdk
+             (controller.version/migrate! vendor sdk-version os' arch)))))
 
 (defn -main
   []
