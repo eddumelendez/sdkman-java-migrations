@@ -46,6 +46,13 @@
   (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
   (main "corretto-11" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
 
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-x64.tar.gz)\)" "mac" "x64")
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-aarch64.tar.gz)\)" "mac" "aarch64")
+  (main "corretto-17" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-macosx-aarch64.tar.gz)\)" "mac" "x64")
+
   (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-aarch64.tar.gz)\)" "linux" "aarch64")
   (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-linux-x64.tar.gz)\)" "linux" "x64")
   (main "corretto-jdk" #"\((https:\/\/corretto.aws.+.amazon-corretto-[\d.-]+-windows-x64-jdk.zip)\)" "windows" "x64")
