@@ -73,6 +73,12 @@
   (main "16" "macos" "x86")
   (main "16" "windows" "x86")
 
+  (main "17" "linux" "arm")
+  (main "17" "linux" "x86")
+  (main "17" "macos" "arm")
+  (main "17" "macos" "x86")
+  (main "17" "windows" "x86")
+
   (main "8" "linux" "x86" true)
   (main "8" "macos" "x86" true)
   (main "8" "windows" "x86" true)
@@ -86,5 +92,11 @@
   (main "16" "linux" "x86" true)
   (main "16" "macos" "x86" true)
   (main "16" "windows" "x86" true)
+
+  (main "17" "linux" "arm" true)
+  (main "17" "linux" "x86" true)
+  (main "17" "macos" "x86" true)
+  (main "17" "macos" "arm" true)
+  (main "17" "windows" "x86" true)
 
   (log/info "Bellsoft Liberica Done"))
