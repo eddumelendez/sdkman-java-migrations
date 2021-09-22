@@ -56,4 +56,10 @@
   (main "[16,17)"  "mac" "x64")
   (main "[16,17)" "windows" "x64")
 
+  (main "[17,18)" "linux" "aarch64")
+  (main "[17,18)" "linux" "x64")
+  (main "[17,18)"  "mac" "aarch64")
+  (main "[17,18)"  "mac" "x64")
+  (main "[17,18)" "windows" "x64")
+
   (log/info "Eclipse Temurin Done"))
