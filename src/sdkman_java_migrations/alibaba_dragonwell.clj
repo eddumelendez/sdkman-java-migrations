@@ -10,7 +10,7 @@
 (defn wire->internal
   [tag url]
   (when url
-    (let [version (re-find (re-matcher #"\d.[^_]+" tag))]
+    (let [version (re-find (re-matcher #"\d[^+_]+" tag))]
       {:version version
        :url     url})))
 
