@@ -45,4 +45,8 @@
   (main "dragonwell11" #"OpenJDK11U-jdk_x64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "x64")
   (main "dragonwell11" #"OpenJDK11U-jdk_x64_windows_dragonwell_dragonwell-.+.zip" "windows" "x64")
 
+  (main "dragonwell17" #"Alibaba_Dragonwell_.+._aarch64_linux.tar.gz" "linux" "aarch64")
+  (main "dragonwell17" #"Alibaba_Dragonwell_.+._x64_linux.tar.gz" "linux" "x64")
+  (main "dragonwell17" #"Alibaba_Dragonwell_.+._x64_windows.zip" "windows" "x64")
+
   (log/info "Alibaba Dragonwell Done"))
