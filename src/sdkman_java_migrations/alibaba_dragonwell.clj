@@ -9,9 +9,10 @@
 
 (defn wire->internal
   [tag url]
-  (let [version (re-find (re-matcher #"\d.[^_]+" tag))]
-    {:version version
-     :url     url}))
+  (when url
+    (let [version (re-find (re-matcher #"\d.[^_]+" tag))]
+      {:version version
+       :url     url})))
 
 (defn fetch-jdk
   [repository glob]
@@ -34,16 +35,18 @@
 (defn main
   [repository glob os arch]
   (let [jdk (fetch-jdk repository glob)]
-    (controller.version/migrate! jdk vendor (:version jdk) os arch)))
+    (some-> jdk
+            (controller.version/migrate! vendor (:version jdk) os arch))))
 
 (defn -main
   []
-  (main "dragonwell8" #"Alibaba_Dragonwell_.+._GA_Linux_aarch64.tar.gz" "linux" "aarch64")
-  (main "dragonwell8" #"Alibaba_Dragonwell_.+._GA_Linux_x64.tar.gz" "linux" "x64")
+  (main "dragonwell8" #"Alibaba_Dragonwell_.+._aarch64_linux.tar.gz" "linux" "aarch64")
+  (main "dragonwell8" #"Alibaba_Dragonwell_.+._x64_linux.tar.gz" "linux" "x64")
+  (main "dragonwell8" #"Alibaba_Dragonwell_.+._x64_windows.zip" "windows" "x64")
 
-  (main "dragonwell11" #"OpenJDK11U-jdk_aarch64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "aarch64")
-  (main "dragonwell11" #"OpenJDK11U-jdk_x64_linux_dragonwell_dragonwell-.+.tar.gz" "linux" "x64")
-  (main "dragonwell11" #"OpenJDK11U-jdk_x64_windows_dragonwell_dragonwell-.+.zip" "windows" "x64")
+  (main "dragonwell11" #"Alibaba_Dragonwell_.+._aarch64_linux.tar.gz" "linux" "aarch64")
+  (main "dragonwell11" #"Alibaba_Dragonwell_.+._x64_linux.tar.gz" "linux" "x64")
+  (main "dragonwell11" #"Alibaba_Dragonwell_.+._x64_windows.zip" "windows" "x64")
 
   (main "dragonwell17" #"Alibaba_Dragonwell_.+._aarch64_linux.tar.gz" "linux" "aarch64")
   (main "dragonwell17" #"Alibaba_Dragonwell_.+._x64_linux.tar.gz" "linux" "x64")
