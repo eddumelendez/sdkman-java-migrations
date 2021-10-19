@@ -44,8 +44,8 @@
     (= 11 java-version)
     (str version ".r11")
 
-    (= 16 java-version)
-    (str version ".r16")))
+    (= 17 java-version)
+    (str version ".r17")))
 
 (defn main
   [version graal-version glob os arch]
@@ -65,10 +65,11 @@
   (main 11 21 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 11 21 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
 
-  (main 16 21 #"graalvm-ce-java16-linux-aarch64-.+.tar.gz" "linux" "aarch64")
-  (main 16 21 #"graalvm-ce-java16-linux-amd64-.+.tar.gz" "linux" "x64")
-  (main 16 21 #"graalvm-ce-java16-darwin-amd64-.+.tar.gz" "mac" "x64")
-  (main 16 21 #"graalvm-ce-java16-windows-amd64-.+.zip" "windows" "x64")
+  (main 17 21 #"graalvm-ce-java17-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 17 21 #"graalvm-ce-java17-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 17 21 #"graalvm-ce-java17-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 17 21 #"graalvm-ce-java17-darwin-aarch64-.+.tar.gz" "mac" "aarch64")
+  (main 17 21 #"graalvm-ce-java17-windows-amd64-.+.zip" "windows" "x64")
 
   (main 8 20 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
   ;(main 8 20 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
