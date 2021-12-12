@@ -62,6 +62,12 @@
 (defn -main
   []
 
+  (main 19 #"https.+.openjdk-.+._linux-aarch64_bin.tar.gz" "linux" "aarch64")
+  (main 19 #"https.+.openjdk-.+._linux-x64_bin.tar.gz" "linux" "x64")
+  (main 19 #"https.+.openjdk-.+._macos-aarch64_bin.tar.gz" "mac" "aarch64")
+  (main 19 #"https.+.openjdk-.+._macos-x64_bin.tar.gz" "mac" "x64")
+  (main 19 #"https.+.openjdk-.+._windows-x64_bin.zip" "windows" "x64")
+
   (main 18 #"https.+.openjdk-.+._linux-aarch64_bin.tar.gz" "linux" "aarch64")
   (main 18 #"https.+.openjdk-.+._linux-x64_bin.tar.gz" "linux" "x64")
   (main 18 #"https.+.openjdk-.+._macos-aarch64_bin.tar.gz" "mac" "aarch64")
