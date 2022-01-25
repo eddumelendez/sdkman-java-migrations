@@ -56,6 +56,17 @@
 
 (defn -main
   []
+  (main 11 22 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 11 22 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 11 22 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 11 22 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
+
+  (main 17 22 #"graalvm-ce-java17-linux-aarch64-.+.tar.gz" "linux" "aarch64")
+  (main 17 22 #"graalvm-ce-java17-linux-amd64-.+.tar.gz" "linux" "x64")
+  (main 17 22 #"graalvm-ce-java17-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 17 22 #"graalvm-ce-java17-darwin-aarch64-.+.tar.gz" "mac" "aarch64")
+  (main 17 22 #"graalvm-ce-java17-windows-amd64-.+.zip" "windows" "x64")
+
   (main 8 21 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
   ;(main 8 21 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 8 21 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
@@ -79,14 +90,5 @@
   (main 11 20 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
   (main 11 20 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
   (main 11 20 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
-
-  (main 8 19 #"graalvm-ce-java8-linux-amd64-.+.tar.gz" "linux" "x64")
-  ;(main 8 19 #"graalvm-ce-java8-darwin-amd64-.+.tar.gz" "mac" "x64")
-  (main 8 19 #"graalvm-ce-java8-windows-amd64-.+.zip" "windows" "x64")
-
-  (main 11 19 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
-  (main 11 19 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
-  (main 11 19 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
-  (main 11 19 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
 
   (log/info "GraalVM Done"))
