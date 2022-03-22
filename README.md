@@ -26,6 +26,10 @@ The `eclipse-temurin` namespace fetch [Adoptium API](https://api.adoptium.net/sw
 
 The `graalvm` namespace fetch [GraalVM Repository](https://github.com/graalvm/graalvm-ce-builds) for new versions.
 
+* Mandrel
+
+The `mandrel` namespace fetch [Mandrel Repository](https://github.com/graalvm/mandrel) for new versions.
+
 * OpenJDK
 
 The `openjdk` namespace fetch [jdk.java.net](https://jdk.java.net/) for new versions.
