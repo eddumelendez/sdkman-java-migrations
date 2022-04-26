@@ -59,6 +59,7 @@
   (main 11 22 #"graalvm-ce-java11-linux-aarch64-.+.tar.gz" "linux" "aarch64")
   (main 11 22 #"graalvm-ce-java11-linux-amd64-.+.tar.gz" "linux" "x64")
   (main 11 22 #"graalvm-ce-java11-darwin-amd64-.+.tar.gz" "mac" "x64")
+  (main 11 22 #"graalvm-ce-java11-darwin-aarch64-.+.tar.gz" "mac" "aarch64")
   (main 11 22 #"graalvm-ce-java11-windows-amd64-.+.zip" "windows" "x64")
 
   (main 17 22 #"graalvm-ce-java17-linux-aarch64-.+.tar.gz" "linux" "aarch64")
