@@ -34,7 +34,7 @@
 
 (defn ^:private main
   [version os arch]
-  (let [os' (if (= os "osx") "mac" os)
+  (let [os' (if (= os "macos") "mac" os)
         jdk (fetch-jdk version os arch)]
     (some-> jdk
             (controller.version/migrate! vendor (:version jdk) os' arch))))
@@ -43,18 +43,18 @@
   []
   (main "17" "linux" "aarch64")
   (main "17" "linux" "x64")
-  (main "17" "osx" "aarch64")
-  (main "17" "osx" "x64")
+  (main "17" "macos" "aarch64")
+  (main "17" "macos" "x64")
   (main "17" "windows" "x64")
 
   (main "11" "linux" "aarch64")
   (main "11" "linux" "x64")
-  (main "11" "osx" "x64")
+  (main "11" "macos" "x64")
   (main "11" "windows" "x64")
 
   (main "16" "linux" "aarch64")
   (main "16" "linux" "x64")
-  (main "16" "osx" "x64")
+  (main "16" "macos" "x64")
   (main "16" "windows" "x64")
 
   (log/info "SapMachine Done"))
