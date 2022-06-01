@@ -52,9 +52,4 @@
   (main "11" "macos" "x64")
   (main "11" "windows" "x64")
 
-  (main "16" "linux" "aarch64")
-  (main "16" "linux" "x64")
-  (main "16" "macos" "x64")
-  (main "16" "windows" "x64")
-
   (log/info "SapMachine Done"))
