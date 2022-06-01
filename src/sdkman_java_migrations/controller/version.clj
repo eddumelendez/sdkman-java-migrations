@@ -10,9 +10,7 @@
   (let [vendor-platform (adapters.release/platform os arch)
         broker-platform (adapters.broker/platform os arch)
         version+vendor (str version "-" vendor)]
-    (if (logic.version/is-valid? version+vendor)
-      (if-not (logic.version/exist? (sdkman/find-version version+vendor broker-platform))
-        (println (-> (adapters.release/internal->wire jdk vendor version vendor-platform)
-                     (sdkman/new-version)))
-        (log/info (str version+vendor " already exist for platform " broker-platform " in sdkman.")))
-      (log/error (str version+vendor " exceeds length. Current " (count version+vendor))))))
+    (if-not (logic.version/exist? (sdkman/find-version version+vendor broker-platform))
+      (println (-> (adapters.release/internal->wire jdk vendor version vendor-platform)
+                   (sdkman/new-version)))
+      (log/info (str version+vendor " already exist for platform " broker-platform " in sdkman.")))))
